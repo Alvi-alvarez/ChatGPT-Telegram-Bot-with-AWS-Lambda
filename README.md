@@ -1,1 +1,1 @@
-# ChatGPT-Telegram-Bot-with-AWS-Lambda
+# ChatGPT Telegram Bot with AWS Lambda
