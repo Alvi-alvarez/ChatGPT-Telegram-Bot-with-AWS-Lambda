@@ -2,6 +2,8 @@
 
 ChatGPT on Telegram by utilizing the services of AWS Lambda, S3, and API Gateway.
 
+03/23 - OpenAI api does not work well, it may take a long time or not work at all
+
 # Features
 
 - [X] API support
