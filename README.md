@@ -1,6 +1,6 @@
 # ChatGPT Telegram Bot with AWS Lambda
 
-Basic script that allows users to use ChatGPT on Telegram by utilizing the services of AWS Lambda, S3, and API Gateway.
+ChatGPT on Telegram by utilizing the services of AWS Lambda, S3, and API Gateway.
 
 # Features
 
