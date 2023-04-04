@@ -4,7 +4,6 @@ import requests
 import openai
 import os
 
-
 S3_CLIENT = boto3.client("s3")
 
 # constants
@@ -12,8 +11,8 @@ OPENAI = os.environ["OPENIA_KEY"]
 USER_ID = os.environ["USER_ID"]
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 S3_BUCKETS = os.environ["BUCKET_TOKEN"]
-# if you want you can make the bot persinality not hardcoded by using environment variables
-PERSINALITY = os.environ["PERSINALITY"]
+# if you want you can make the bot personality not hardcoded by using environment variables
+PERSINALITY = os.environ["PERSINALITY"]  # There's a typo here, fix it if you want
 
 
 # Define the Lambda handler function
@@ -33,7 +32,7 @@ def lambda_handler(event, context):
 def clear_chat():
     try:
         save_file([{"role": "system", "content": PERSINALITY}])
-        return send_msg(TELEGRAM_TOKEN, USER_ID, "🗑️")
+        return send_msg("🗑️")
     except Exception as e:
         return {"statusCode": 400, "message": str(e)}
 
@@ -59,23 +58,23 @@ def load_s3_object():
 
 def gpt(input):
     openai.api_key = OPENAI
-    send_typing(USER_ID, TELEGRAM_TOKEN)
+    send_typing()
     msgs = load_s3_object()
     msgs.append({"role": "user", "content": input})
     chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=msgs)
     msgs.append({"role": "assistant", "content": str(chat.choices[0].message.content)})
     save_file(msgs)
-    return send_msg(TELEGRAM_TOKEN, USER_ID, str(chat.choices[0].message.content))
+    return send_msg(str(chat.choices[0].message.content))
 
 
 # This is not necessary but it looks cool
-def send_typing(USER_ID, TELEGRAM_TOKEN):
+def send_typing():
     api_url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/"
     params = {"chat_id": USER_ID, "action": "TYPING"}
     requests.post(f"{api_url}sendChatAction", data=params).json()
 
 
-def send_msg(TELEGRAM_TOKEN, USER_ID, telegram_msg):
+def send_msg(telegram_msg):
     api_url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/"
     params = {"chat_id": USER_ID, "text": telegram_msg, "parse_mode": "MARKDOWN"}
     res = requests.post(f"{api_url}sendMessage", data=params).json()
